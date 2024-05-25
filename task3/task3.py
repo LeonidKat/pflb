@@ -1,38 +1,34 @@
 import json
-import sys
-import inspect
 
-def load_json(file_path):
-    with open(file_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+# Получение путей к файлам от пользователя
+values_file_path = input("Введите путь к файлу values.json: ")
+tests_file_path = input("Введите путь к файлу tests.json: ")
+report_file_path = input("Введите путь для сохранения report.json: ")
 
-print(inspect.signature(load_json).return_annotation)
+# Загрузка значений из JSON файла
+with open(values_file_path, 'r', encoding='utf-8') as file:
+    values = json.load(file)['values']
 
-def save_json(data, file_path):
-    with open(file_path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+# Загрузка тестов из JSON файла
+with open(tests_file_path, 'r', encoding='utf-8') as file:
+    tests = json.load(file)['tests']
 
-def update_values(tests, values_dict):
+# Создание маппинга значений
+value_map = {item['id']: item['value'] for item in values}
+
+# Рекурсивная функция для применения значений
+def apply_values(tests):
     for test in tests:
-        test_id = test['id']
-        if test_id in values_dict:
-            test['value'] = values_dict[test_id]
         if 'values' in test:
-            update_values(test['values'], values_dict)
+            apply_values(test['values'])
+        if test['id'] in value_map:
+            test['value'] = value_map[test['id']]
 
-def main(values_path, tests_path, report_path):
-    values_data = load_json(values_path)
-    tests_data = load_json(tests_path)
-    
-    values_dict = {entry['id']: entry['value'] for entry in values_data['values']}
-    
-    update_values(tests_data['tests'], values_dict)
-    
-    save_json(tests_data, report_path)
+# Применение значений
+apply_values(tests)
 
-if __name__ == '__main__':
-    values_path = 'values.json'
-    tests_path = 'tests.json'
-    report_path = 'report.json'
-    
-    main(values_path, tests_path, report_path)
+# Вывод результата в файл
+with open(report_file_path, 'w', encoding='utf-8') as file:
+    json.dump({'tests': tests}, file, indent=2, ensure_ascii=False)
+
+print(f"Результаты сохранены в файл: {report_file_path}")
