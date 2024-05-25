@@ -27,8 +27,8 @@ def determine_point_position(xc, yc, r, xt, yt):
 
 def main():
     # Главная функция скрипта
-    circle_file = input("Введите путь к файлу с данными о круге: ")  # Запрос пути к файлу с данными о круге у пользователя
-    points_file = input("Введите путь к файлу с координатами точек: ")  # Запрос пути к файлу с координатами точек у пользователя
+    circle_file = 'circle.txt'  # Укажите путь к файлу с данными о круге
+    points_file = 'points.txt'  # Укажите путь к файлу с координатами точек
 
     xc, yc, r = read_circle_data(circle_file)  # Чтение данных о круге из файла
     points = read_points_data(points_file)  # Чтение координат точек из файла
