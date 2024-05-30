@@ -26,8 +26,8 @@ def determine_point_position(xc, yc, r, xt, yt):
         return "2"  # Возврат значения "2", если точка снаружи окружности
 
 def main():
-    circle_file = sys.args[1]
-    points_file = sys.args[2]
+    circle_file = sys.argv[1]
+    points_file = sys.argv[2]
 
     xc, yc, r = read_circle_data(circle_file)  # Чтение данных о круге из файла
     points = read_points_data(points_file)  # Чтение координат точек из файла
