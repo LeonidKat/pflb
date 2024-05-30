@@ -1,9 +1,10 @@
 import json
+import sys
 
 # Получение путей к файлам от пользователя
-values_file_path = input("Введите путь к файлу values.json: ")
-tests_file_path = input("Введите путь к файлу tests.json: ")
-report_file_path = input("Введите путь для сохранения report.json: ")
+values_file_path = sys.argv[1]
+tests_file_path = sys.argv[2]
+report_file_path = sys.argv[3]
 
 # Загрузка значений из JSON файла
 with open(values_file_path, 'r', encoding='utf-8') as file:
